@@ -1,0 +1,14 @@
+schema_version: 1
+processing_version: matching_policy_1
+model_id: m_35e4c0ab33c1469a334ca837
+collection_id: o_c645f248f801845378f0fdaf
+acquisition_id: a_d30181bd8998aca81bb33be1
+data_mode: real
+quantity: practical_salinity
+# No universal collocation tolerances are asserted. These are required gates.
+tolerances:
+  horizontal_m: null
+  vertical_m: null
+  time_seconds: null
+  review: unreviewed
+  rationale: null

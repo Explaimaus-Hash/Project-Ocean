@@ -1,0 +1,71 @@
+# Published descriptions only. No provider is contacted by loading this registry.
+# Part 4 adds operator adapters; registry notes never establish live readiness.
+schema_version: 1
+datasets:
+  - source_id: incois_bio_roms
+    dataset_id: incois_bio_roms_v2
+    title: INCOIS BIO-ROMS corrected surface pCO2 product V2 and input fields
+    role: model
+    access_method: local_netcdf
+    origin_url: https://zenodo.org/records/14614739
+    version: v2
+    local_path: data/raw/incois/bio_roms/v2/pCO2-Corrected_INCOIS-BIO-ROMS_v2.nc
+    expected_md5: 78b7c0fbaa00db58a31563bb442a693b
+    published_notes: >-
+      Published monthly 1980-2019, 30-120E and 30S-30N, 1/12 degree.
+      Lists SST, SSS, MLD, NO3, DIC, CHL and pCO2 products.
+      Published scope alone does not establish capabilities. Actual V2 inspection
+      in docs/MILESTONE_3.md confirms TIME/LAT/LON fields,
+      without vertical coordinates or current components.
+      Partial browser downloads are not this registered final file.
+  - source_id: incois_godas
+    dataset_id: incois_godas_2025
+    title: INCOIS GODAS 2025
+    role: model
+    access_method: opendap
+    origin_url: https://las.incois.gov.in/thredds/dodsC/las/id-cbbdd5ab07/data_home_las_datasets_godas_2025.nc.jnl
+    version: '2025'
+    published_notes: Variable names and source availability remain unverified.
+  - source_id: incois_godas
+    dataset_id: incois_godas_2024
+    title: INCOIS GODAS 2024
+    role: model
+    access_method: opendap
+    origin_url: https://las.incois.gov.in/thredds/dodsC/las/id-1bb8b13c5b/data_home_las_datasets_godas_2024.nc.jnl
+    version: '2024'
+  - source_id: incois_godas
+    dataset_id: incois_godas_2023
+    title: INCOIS GODAS 2023
+    role: model
+    access_method: opendap
+    origin_url: https://las.incois.gov.in/thredds/dodsC/las/id-eeb330b387/data_home_las_datasets_godas_2023.nc.jnl
+    version: '2023'
+  - source_id: incois_godas
+    dataset_id: incois_godas_2022
+    title: INCOIS GODAS 2022
+    role: model
+    access_method: opendap
+    origin_url: https://las.incois.gov.in/thredds/dodsC/las/id-fe1698c540/data_home_las_datasets_godas_2022.nc.jnl
+    version: '2022'
+  - source_id: copernicus
+    dataset_id: copernicus_global_multiyear_phy
+    title: Copernicus GLOBAL_MULTIYEAR_PHY_001_030
+    role: model
+    access_method: copernicusmarine
+    origin_url: https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/description
+    published_notes: Select and verify a current dataset/version for each explicit acquisition.
+  - source_id: argo
+    dataset_id: argo_gdac
+    title: Official Argo GDAC observations via Argopy
+    role: observation
+    access_method: argopy
+    origin_url: ftp://ftp.ifremer.fr/ifremer/argo
+    published_notes: Argopy is the access client, not the data owner.
+  - source_id: ifremer_glider
+    dataset_id: ifremer_glider_v2
+    title: IFREMER EGO glider observations
+    role: observation
+    access_method: ftp
+    origin_url: ftp://ftp.ifremer.fr/ifremer/glider/v2/
+    version: v2
+    published_notes: Earlier Bella sample was tested outside the comparison box.

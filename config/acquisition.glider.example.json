@@ -1,0 +1,7 @@
+{
+  "provider": "glider",
+  "dataset_id": "ifremer_glider_v2",
+  "remote_path": "/ifremer/glider/v2/bella/bella_20240206/Bella_626_R.nc",
+  "deadline_seconds": 90,
+  "max_bytes": 67108864
+}

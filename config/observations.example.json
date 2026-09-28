@@ -1,0 +1,9 @@
+{
+  "region": {"west": 30, "east": 120, "south": -30, "north": 30},
+  "start_date": "2019-01-01",
+  "end_date": "2019-03-31",
+  "pressure_min_dbar": 0,
+  "pressure_max_dbar": 10,
+  "variables": ["PRES", "TEMP", "PSAL"],
+  "value_mode": "raw"
+}

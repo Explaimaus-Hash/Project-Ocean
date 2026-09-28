@@ -1,0 +1,16 @@
+{
+  "provider": "argo",
+  "dataset_id": "argo_gdac",
+  "selection": {
+    "region": {"west": 65, "east": 75, "south": -5, "north": 5},
+    "start_time": "2019-01-27T00:00:00Z",
+    "end_time": "2019-01-30T23:59:59Z",
+    "vertical_min": 0,
+    "vertical_max": 10,
+    "vertical_kind": "pressure_dbar"
+  },
+  "deadline_seconds": 60,
+  "max_bytes": 8388608,
+  "max_samples": 1000,
+  "max_values": 100000
+}

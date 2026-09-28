@@ -1,0 +1,13 @@
+# Enforced prototype ceilings; not evidence of browser performance.
+schema_version: 1
+max_axis_values: 10000
+max_time_steps: 12
+max_preparation_values: 8000000
+max_source_chunk_bytes: 33554432
+netcdf_cache_bytes: 16777216
+max_preview_cells: 16384
+max_scientific_frame_cells: 65536
+max_response_bytes: 2097152
+max_manifest_bytes: 524288
+max_product_file_bytes: 134217728
+max_products: 128

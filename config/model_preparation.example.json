@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "acquisition_id": "a_9e918d43555ffc26d3659e08",
+  "variables": ["thetao", "so", "uo", "vo"],
+  "selection": {
+    "region": {"west": 65, "east": 66, "south": -1, "north": 0},
+    "start_time": "2019-01-29T00:00:00Z",
+    "end_time": "2019-01-30T23:59:59Z",
+    "vertical_min": 0.49402499198913574,
+    "vertical_max": 10,
+    "vertical_kind": "depth_m"
+  }
+}

@@ -1,0 +1,10 @@
+node_modules/
+.next/
+test-results/
+playwright-report/
+*.tsbuildinfo
+.env*
+!.env.example
+public/cesium/*
+!public/cesium/README.md
+/public/plotly/

@@ -1,0 +1,699 @@
+{
+  "source": "C:/Users/pc/OneDrive/Desktop/frontend",
+  "note": "Recovery baseline before integration edits. Development source maps are not proof of final production-source parity; handoff fallbacks are historical Part 6.",
+  "files": [
+    {
+      "name": "src/lib/selection.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 3674,
+      "sha256": "2109e284a6d2482763faee4178013370281bd8399b9cf7ec767db344619dd5da"
+    },
+    {
+      "name": "src/features/globe/GlobeContext.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 3806,
+      "sha256": "899ade8424873279269ce683cf22ae1cf302b4c9c12a667eff91928a41e7f1ba"
+    },
+    {
+      "name": "src/features/scalar/ScalarContext.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 3477,
+      "sha256": "facda7fa0081a8fa694bca3a6e849833cc2d8b47f8ad8a05da8d999efba774a7"
+    },
+    {
+      "name": "src/features/data-sources/DataProvider.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 10550,
+      "sha256": "d93a64a4cf71079584ab004880768421a09c371655e874d87236da4577e02e90"
+    },
+    {
+      "name": "src/lib/api/types.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 3691,
+      "sha256": "e82a72435a5912ef2fbc07555f19d72474ae487cb2e9b8e7a5f37aaeac4a0603"
+    },
+    {
+      "name": "src/lib/api/errors.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 2865,
+      "sha256": "dd5a0a70391a6c8fcc92f730b8214053d5bb152e45e3707a20fae6ee817a306b"
+    },
+    {
+      "name": "src/app/tokens.css",
+      "origin": "development_css_bundle",
+      "priority": 2,
+      "bytes": 848,
+      "sha256": "8481f9ca463d51a8c4237c7364097aca157530c960d89a8d1d60a611624d391c"
+    },
+    {
+      "name": "src/app/globals.css",
+      "origin": "development_css_bundle",
+      "priority": 2,
+      "bytes": 44073,
+      "sha256": "c535187cbcb1f94b5e942d5e81add38cc1263e1bd478fd9cb250091eeb73dbb4"
+    },
+    {
+      "name": "src/app/layout.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 641,
+      "sha256": "4911a1b2c33d7081e791debd29aa74697601dde8e52bfbe6b1f6990e8a745fcf"
+    },
+    {
+      "name": "src/components/layout/WorkspaceShell.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 4436,
+      "sha256": "09900e056815d57f6da3854dbfaa29db345da466eac4e6e6d150660f96f46526"
+    },
+    {
+      "name": "src/lib/routes.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 730,
+      "sha256": "25598c5c1213384cd04523950d85d426830cd72d4c88c7ae768af366c9e9ec4a"
+    },
+    {
+      "name": "src/features/globe/globeConfig.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 593,
+      "sha256": "96b40f69df75fa672ab927da3ceb087968125e6e12aaa75ee23c65977d3282b5"
+    },
+    {
+      "name": "src/features/scalar/ScientificColorScale.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 7823,
+      "sha256": "034f6269a94d4ce9ac45cda7fe1294f20d9cbed5d693e8a88ef1ba623fa03489"
+    },
+    {
+      "name": "src/features/analysis/plotModel.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1621,
+      "sha256": "14cd648cd3d240023a08de9ac49ecb06a2186cccf82305ae229c5fb38bdb4760"
+    },
+    {
+      "name": "src/features/analysis/ScientificPlotShell.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 7370,
+      "sha256": "019d63bef77c515ce21b77ad2a896bbc5579b36df16cf58f6ef763e3c19022c0"
+    },
+    {
+      "name": "src/features/analysis/TimeSeriesPlot.tsx",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 2918,
+      "sha256": "c5a60c89241e1df17de78e3cd44a40b1caff82e8765404fb6a2ed69d6a804034"
+    },
+    {
+      "name": "src/features/analysis/VerticalProfilePlot.tsx",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 1842,
+      "sha256": "489f1988b0e7f495341a066e55e3b869f918caaef2e5cea3c0fe1bd7e2b21c26"
+    },
+    {
+      "name": "src/features/analysis/TimeDepthHeatmap.tsx",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 1801,
+      "sha256": "91f797b3f6b5736f1f95a861eaaaf1414fbcb6451d31b00ce27eaed970e74417"
+    },
+    {
+      "name": "src/features/analysis/TransectPlot.tsx",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 1781,
+      "sha256": "6488f463f9f5a60c4a1bb0800c32ccb2f7fe5c195b0392dd618d068f92c7237f"
+    },
+    {
+      "name": "src/lib/loadCesium.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 957,
+      "sha256": "edd15e203a467ba08291ef26013ee26db1d9d7aec2d1155f6c5814211585e7a5"
+    },
+    {
+      "name": "src/features/observations/loadPlotly.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1408,
+      "sha256": "2df79ff530fdde2acdc1bf7ccd8d057cff4f7b1eba00c18a7ab88029381f5cae"
+    },
+    {
+      "name": "src/lib/dataClient.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 13714,
+      "sha256": "e99b39bd16cea0c37ebd5d695a60326ac1b3d9ee10c653b1ab8c6bb7bf041e80"
+    },
+    {
+      "name": "src/lib/api/validation.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 6874,
+      "sha256": "0210cfd3c33de5ccec8a16730fc1493277102b62b236a5451fb7fa58a2e466aa"
+    },
+    {
+      "name": "src/lib/demo/transport.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 12680,
+      "sha256": "edd76f9ada3279513398bb9064dfdd9d2a5a3745494a3b6bcf6432d521566dde"
+    },
+    {
+      "name": "src/components/layout/BottomTimeline.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 6337,
+      "sha256": "4d494a955659eaffb784532b0e5d4597733e62c9f47f291d0eb8936d2cde8e92"
+    },
+    {
+      "name": "src/components/layout/ContextPanel.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1145,
+      "sha256": "5200f416e26df8e20999cf5026ccec73307aa2457169da278987b7752e35b211"
+    },
+    {
+      "name": "src/components/layout/NavigationRail.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1170,
+      "sha256": "beda15151e99a0895a4a5fd2d6195f32af2d6ce73a48e2b129331b11e01858ce"
+    },
+    {
+      "name": "src/components/layout/RightInspector.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 6247,
+      "sha256": "013fee33ffb72b5575a05cedb1316c3ad88d0c296acec3c3bb17b7940837fa8f"
+    },
+    {
+      "name": "src/components/layout/TopBar.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 2017,
+      "sha256": "81ca2e1378d74c0af07288281d2e1e9485d49fd43d898c156f9469bd6ae95590"
+    },
+    {
+      "name": "src/components/layout/WorkspaceDialogs.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 2573,
+      "sha256": "d655d884ccc2056cf70eb40d319e5d961cda973442dd4ff2fa927d951af202bd"
+    },
+    {
+      "name": "src/components/ui/EmptyState.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 299,
+      "sha256": "a9ab6910137267af96e3f39d718e6523d109ea3c7537049e63557234e888a9e6"
+    },
+    {
+      "name": "src/components/ui/ErrorState.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 343,
+      "sha256": "6b2118e378ed6f202ef91f0c7d717e2bbba68382b489d09e8338d2f1f53610b3"
+    },
+    {
+      "name": "src/components/ui/LoadingOverlay.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 303,
+      "sha256": "aede4d9fa6e58b7d657a90fbbd4eaa739bfd5aec8a831720aa6dbd64625ae8e1"
+    },
+    {
+      "name": "src/components/ui/ScientificTooltip.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 825,
+      "sha256": "82114e7ec547d814c06e13226cbdf32fdb8ebe091d1d328f80e674278c08706f"
+    },
+    {
+      "name": "src/components/ui/StatusBadge.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 324,
+      "sha256": "39ad09380082e1db69106ab416c68c2b86edb80c24cfe676ffecd850d01ee940"
+    },
+    {
+      "name": "src/features/analysis/AnalysisWorkspace.tsx",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 10162,
+      "sha256": "c52339f90f76892d3ae5aa63c8471d5655bdc729922ba76e71978adbcb5a8014"
+    },
+    {
+      "name": "src/features/analysis/useGeographicSelection.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 4335,
+      "sha256": "ba4a3b287a8fd22fe1a7e6e4974bf70fb7d1303777c6805da1dfd8b310f9d1f7"
+    },
+    {
+      "name": "src/features/comparison/ComparisonPanel.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 5719,
+      "sha256": "130b96217e790fb1270f101e26e91bd08797219bfdc0c64078c0a64155f27d46"
+    },
+    {
+      "name": "src/features/controls/SelectionControls.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 6925,
+      "sha256": "264814374616be546d4a2d3c12885475e2427a49b4fcdfcb0dcf6fe65f7754a0"
+    },
+    {
+      "name": "src/features/data-sources/DataSourcesPanel.tsx",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 1321,
+      "sha256": "7fe145b7220ed571ccc09da667f37d53b934911722bd9a5efbcee186e1819b1e"
+    },
+    {
+      "name": "src/features/globe/CesiumScene.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 4281,
+      "sha256": "81380c10d336fec44338527169f7351b7ef68452804b9d39af6e2167ebd6f05b"
+    },
+    {
+      "name": "src/features/globe/GlobeController.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 9435,
+      "sha256": "6247017eb3b4bf4b03e0a477ab00b6b0c719d2029b77c0d1c430f700b624a93c"
+    },
+    {
+      "name": "src/features/globe/useCesiumGlobe.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 5706,
+      "sha256": "fb333f34c00bcd9333b97ed25ab5c485653bdf3f43b495cb65ca055bc955945b"
+    },
+    {
+      "name": "src/features/observations/ObservationGlobeLayer.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 6793,
+      "sha256": "e15e2e68d45b29b85efbc321d02ab808e6d06581a6603a3b060f009d68007792"
+    },
+    {
+      "name": "src/features/observations/ObservationInspector.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 6075,
+      "sha256": "8a1936bf58302846d5f46beac1c4fd5814eecb4bbe64197f23f9a40dc612f5bb"
+    },
+    {
+      "name": "src/features/observations/observationModel.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 2557,
+      "sha256": "c923b44c44b23689df73e4c824867bb7a137b6c1a5cf3229dfe7ab4fee10a7b7"
+    },
+    {
+      "name": "src/features/observations/ObservationSearch.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 6181,
+      "sha256": "41e7e67e65b1276931ef1db25da5a7942a15c4cf1e4dffffc1ca3f6cb4db6ba9"
+    },
+    {
+      "name": "src/features/observations/ProfilePlot.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 4308,
+      "sha256": "15d453e6c33b355d4dea75dca2795bb8d9c6b4e28597044ed3bc0a9ced01f18a"
+    },
+    {
+      "name": "src/features/scalar/BoundedFrameLoader.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1094,
+      "sha256": "5d4acf667d58f00b8c0fe8562d03e620c249697bd08fe0b7c9e92e5e4c734bcc"
+    },
+    {
+      "name": "src/features/scalar/ScalarGlobeLayer.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 8532,
+      "sha256": "5b34f786c0e70efc31973d7df8c23606f09f2da0cc64c9b0a826d1ba7ea40da0"
+    },
+    {
+      "name": "src/features/scalar/ScalarLayerPanel.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 7170,
+      "sha256": "c106f6e2ad677fe6f9176e574bf5988381d68e10e7c0eb8eb802475e889403af"
+    },
+    {
+      "name": "src/features/WorkspacePanel.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1069,
+      "sha256": "eff5f59df6a1edb2d1f48f64f4499404df07dda7a230b3d5de764b237824fdf4"
+    },
+    {
+      "name": "src/lib/cesium.d.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 85,
+      "sha256": "3eacf53f7b88cb14fede58beb1697ade6cd70aabd44d38f52377fcf953e7b5d5"
+    },
+    {
+      "name": "src/lib/useBackendStatus.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 1160,
+      "sha256": "e277764702d2547cb0f4bedc3d55648f54674e8ab8fe93437bbcf3d8d5975044"
+    },
+    {
+      "name": "tests/analysis.spec.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 5742,
+      "sha256": "f485441c23adf84a78cb8cd2c36b13931144e5112a75baaf8b75d0519882152c"
+    },
+    {
+      "name": "tests/data-client.spec.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 4421,
+      "sha256": "7d84c9609394d4bca6f087cce4f8e23245cc3f7b049de096d3a01aff59ac37c3"
+    },
+    {
+      "name": "tests/demo.spec.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 3895,
+      "sha256": "569320881804857356517bb3f5b090f3034d3ee9ac4c7704b0de992ce8fe9ea7"
+    },
+    {
+      "name": "tests/explorer.spec.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 4398,
+      "sha256": "39676c14a8cc4a9565672780de4c3617e75bd57c706da78979e0b2603e22433a"
+    },
+    {
+      "name": "tests/observations-ui.spec.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 5681,
+      "sha256": "a81be5c231c228592fba5fdcc19c01ad230f8e3c98b00560afb9a1b16f7565a1"
+    },
+    {
+      "name": "tests/observations.spec.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 3285,
+      "sha256": "3158b5ea31be8d9075e3e3bc846cdf1b02360d075e4f13def609a807b8fc66b7"
+    },
+    {
+      "name": "tests/scalar-ui.spec.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 3392,
+      "sha256": "bd4e27196e0bf37d87fb5f545c2c642a3d583e2604008c8cdfabebce0acdda4e"
+    },
+    {
+      "name": "tests/scalar.spec.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 5396,
+      "sha256": "a99bc2404b1f1b44fe1d23310533bec22eb4cc5462bbe029beda8b8f9aec6146"
+    },
+    {
+      "name": "tests/workspace.spec.ts",
+      "origin": "historical_part6_handoff",
+      "priority": 1,
+      "bytes": 4783,
+      "sha256": "8e0336a7e36b2847dfc105a9547279d9bcd77e7d5b42123633a11bb70b5b3108"
+    },
+    {
+      "name": "src/app/comparison/page.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 187,
+      "sha256": "a80110999a568c3f35d89e824fb4614437db94199cd8e3b85969f8378fa3bde4"
+    },
+    {
+      "name": "src/components/layout/ConnectedTimeline.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1014,
+      "sha256": "697bd2825e62bd9d242424f0051b8a80129250b1e5d033c0ee6a7a7875f67e4a"
+    },
+    {
+      "name": "src/components/layout/DisplayPreferences.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 3729,
+      "sha256": "7d7bda2152bea6cc746637845c65cf30eea5067a461adff0d20e2b8ab4d403d7"
+    },
+    {
+      "name": "src/features/advanced-rendering/AdvancedControls.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 4919,
+      "sha256": "eac34884d7cb29069baa0485e19225be8764d680ef7c96bf51b8436b3d12f496"
+    },
+    {
+      "name": "src/features/advanced-rendering/advancedModel.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 3743,
+      "sha256": "9d1488e7a6bf83cb1f27ac6d8fb3882e92febfcc544196ffc214a278eb6c4873"
+    },
+    {
+      "name": "src/features/comparison/ComparisonControls.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 3351,
+      "sha256": "47fb058dd0c203bd06077f3aa0a57f02441ea32908a4b884929b5617ec7f67f2"
+    },
+    {
+      "name": "src/features/comparison/ComparisonMetrics.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1303,
+      "sha256": "b22a046f7911745bb75fc345d547213d97f9577dbdebf23da282d709b53fdc13"
+    },
+    {
+      "name": "src/features/comparison/ComparisonSummary.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1787,
+      "sha256": "ab7ccc69a287de51eca760dcbdde7daf3dab5b816fe1f07abf770830fc83733c"
+    },
+    {
+      "name": "src/features/comparison/MatchedPairTable.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 3809,
+      "sha256": "3d1775d66c015350b044b7e1b7599e98ded3d3c5ef689b99e0b86dbdb89b51c6"
+    },
+    {
+      "name": "src/features/comparison/PairedSeriesPlot.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1911,
+      "sha256": "24a3f81a28ca2480adeca555255b1e3ec6dfe52ddff59ccef704632c26842586"
+    },
+    {
+      "name": "src/features/comparison/ProfileComparisonPlot.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1923,
+      "sha256": "4fb36866bf3c161ee573a8e6d7e058eaff76610ac5a559f6ed8286e81a8c86d2"
+    },
+    {
+      "name": "src/features/comparison/ResidualPlot.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 3277,
+      "sha256": "8d75dc52c8eb55a7eadbcfb65359b4e69b03a416e8e92831d9f2f29dc577a86e"
+    },
+    {
+      "name": "src/features/comparison/ScatterComparisonPlot.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1918,
+      "sha256": "94fb6c1c976de05de03819f9fa421996e77712a556903f1af3d82c2f1b2aade6"
+    },
+    {
+      "name": "src/features/comparison/comparisonModel.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 4107,
+      "sha256": "8cd44a5f7b796bd82c3cf8af785f930364826dde25b605bddb853d9a66508a1a"
+    },
+    {
+      "name": "src/features/comparison/comparisonPlot.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 946,
+      "sha256": "e293bb969fa4c77b3b0a51c6a547ee6c4499dbf6f7540e211c12116af71e7cc8"
+    },
+    {
+      "name": "src/features/comparison/demoComparison.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 2236,
+      "sha256": "ce51cd099b926dbc2447fcce44aefe231d124d423875c63de79990ab054e4f76"
+    },
+    {
+      "name": "src/features/data-sources/sourceInventory.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 4207,
+      "sha256": "a50671f45cec4d3e193b0be85a9bca6e59ec593de1a118eb6b6b03245f727365"
+    },
+    {
+      "name": "src/features/scalar/modelPoint.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1081,
+      "sha256": "505ee4fe4691befcb643734543f85670aa184706b012313fecfc4bc08a6f34cb"
+    },
+    {
+      "name": "src/app/explorer/page.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 228,
+      "sha256": "3225e119d90dc29dfaad25b54c24cb0162c10aa0611ff855250df5d2f0753b4f"
+    },
+    {
+      "name": "src/app/page.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 104,
+      "sha256": "29bd2e4deeb82078da0cbbf692dba05a270c5658c1c738260d98738b0254cf02"
+    },
+    {
+      "name": "src/features/advanced-rendering/AdvancedLayer.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 5620,
+      "sha256": "3e674e05ec7fc9b70e0c1dad5b5eff05fdf5f178ebb93e66bd4c67acbda6263c"
+    },
+    {
+      "name": "src/features/advanced-rendering/ConnectedAdvancedLayer.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1398,
+      "sha256": "876a1269411d7d077ca06db35f69fdebb3bdc506d2a6289d12fcd476c238911a"
+    },
+    {
+      "name": "src/features/advanced-rendering/CurrentRenderer.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 310,
+      "sha256": "e561a13dc117c606782b23726d87c91d1354ccc0e84e0d82fea3263b2a86fcee"
+    },
+    {
+      "name": "src/features/advanced-rendering/DepthSliceLayer.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 314,
+      "sha256": "30f4f785101d5368886efccf87d96b1cf0a32a521a91f8008d7d5dbf1c933bbf"
+    },
+    {
+      "name": "src/features/advanced-rendering/RenderPerformance.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1406,
+      "sha256": "a7964ec00bae85b3c3004383cb9d41dd38212cf0a37bfafe028ec09547c6792f"
+    },
+    {
+      "name": "src/features/advanced-rendering/VolumePrototype.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 309,
+      "sha256": "56f8cfbe641ad9be5896207d3aea41337bbb38323ad1b7fd725018e0d184a0e2"
+    },
+    {
+      "name": "src/features/advanced-rendering/cesiumAdvanced.ts",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 5665,
+      "sha256": "7cd6efe6893979db71ff0b2c78b95b6fb3fc4a9c853be2df94d71141c5cfa790"
+    },
+    {
+      "name": "src/features/scalar/ModelPointSelection.tsx",
+      "origin": "development_bundle_sourcesContent",
+      "priority": 2,
+      "bytes": 1039,
+      "sha256": "46e55a498c2c95d56b65329ed65fdbfafa0d91bcfa030249a9b273115956d983"
+    },
+    {
+      "name": "package.json",
+      "origin": "original_file",
+      "priority": 3,
+      "bytes": 732,
+      "sha256": "9b5fdb39056deacc667375869ded803001afd78ad45b335460af8585332122cc"
+    },
+    {
+      "name": "package-lock.json",
+      "origin": "original_file",
+      "priority": 3,
+      "bytes": 107739,
+      "sha256": "fd57f3b46306a63f3dbe530c45b1be327e3953887bac9c159e8f73a2e2fb61c1"
+    },
+    {
+      "name": "next.config.ts",
+      "origin": "original_file",
+      "priority": 3,
+      "bytes": 182,
+      "sha256": "22e3f34dc66edad801eed1feb226f5ff026b08ad45a0dd8f79479cfe8e5f9cf9"
+    },
+    {
+      "name": "tsconfig.json",
+      "origin": "original_file",
+      "priority": 3,
+      "bytes": 703,
+      "sha256": "b69c4765e3d9a1a29a0920b435da736cbe66f722e28c2f98a884b5309b39c5b3"
+    },
+    {
+      "name": "eslint.config.mjs",
+      "origin": "original_file",
+      "priority": 3,
+      "bytes": 424,
+      "sha256": "94bdfdbbfd5553986992e83e82459911140c2caf8332de9a1109e4d4b2329fc5"
+    },
+    {
+      "name": "next-env.d.ts",
+      "origin": "original_file",
+      "priority": 3,
+      "bytes": 296,
+      "sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+    },
+    {
+      "name": ".gitignore",
+      "origin": "original_file",
+      "priority": 3,
+      "bytes": 146,
+      "sha256": "28aeb165401b98326778aa9eed723454f8b023aa7e1534cc207a0854a8bb7fd8"
+    },
+    {
+      "name": "scripts/copy-cesium.mjs",
+      "origin": "original_file",
+      "priority": 3,
+      "bytes": 867,
+      "sha256": "282235cec6244e43d91f2c038fdee8b10352914b7384fb343832a0c004160c09"
+    }
+  ]
+}
