@@ -16,6 +16,7 @@ import os
 import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
+from time import sleep
 from typing import Any
 
 from pydantic import ValidationError
@@ -478,6 +479,20 @@ def _cleanup_private(directory: Path | None, parent: Path) -> None:
     directory.rmdir()
 
 
+def _publish_directory(source: Path, destination: Path) -> None:
+    """Retry transient Windows sharing/access locks, never replace an output."""
+    for attempt in range(8):
+        if destination.exists():
+            raise _error("product_conflict", "Another operator published this product.")
+        try:
+            source.rename(destination)
+            return
+        except PermissionError as error:
+            if getattr(error, "winerror", None) not in {5, 32} or attempt == 7:
+                raise
+            sleep(0.1 * (attempt + 1))
+
+
 def prepare_product(
     request: PreparationRequest, root: Path, *, data_mode: str = "real"
 ) -> ProductManifest:
@@ -637,9 +652,9 @@ def prepare_product(
             raise _error("product_conflict", "Another operator published this product.")
         # Publish cache first; processed directory (including manifest) is the
         # commit marker. A crash may leave an unreferenced cache, never ready data.
-        preview_temp.rename(final_cache)
+        _publish_directory(preview_temp, final_cache)
         preview_temp = None
-        scientific_temp.rename(final_scientific)
+        _publish_directory(scientific_temp, final_scientific)
         scientific_temp = None
         return manifest
     except ProductError:

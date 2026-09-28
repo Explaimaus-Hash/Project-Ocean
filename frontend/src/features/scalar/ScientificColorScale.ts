@@ -24,7 +24,7 @@ export interface Scale {
 export function defaultPalette(variable: string): Palette {
   return /sss|salin/i.test(variable)
     ? "salinity"
-    : /chlor/i.test(variable)
+    : /chlor|^CHL$/i.test(variable)
       ? "chlorophyll"
       : /speed/i.test(variable)
         ? "speed"

@@ -83,6 +83,7 @@ const dataset = shape<T.Dataset>({
   ),
   product_id: nullable(text),
   time_products: optional(array(shape({timestamp, product_id:text}),1536)),
+  variable_time_products: optional(array(shape({variable:text, times:array(shape({timestamp,product_id:text}),1536)}),64)),
   variables: array(variable, 64),
   capabilities,
   time_coverage: nullable(shape({ start: timestamp, end: timestamp })),

@@ -43,6 +43,7 @@ export interface Dataset extends Envelope {
     "prepared" | "not_prepared" | "not_configured" | "provider_unavailable";
   product_id: string | null;
   time_products?: { timestamp: string; product_id: string }[];
+  variable_time_products?: { variable: string; times: { timestamp: string; product_id: string }[] }[];
   variables: Variable[];
   capabilities: Capabilities;
   time_coverage: { start: string; end: string } | null;

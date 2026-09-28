@@ -84,12 +84,12 @@ export function SelectionControls() {
       <label htmlFor="variable">VARIABLE</label>
       <select
         id="variable"
-        disabled={!p}
+        disabled={!d.variables.length}
         value={d.variable ?? ""}
         onChange={(e) => d.selectVariable(e.target.value)}
       >
-        {!p && <option value="">Awaiting product metadata</option>}
-        {p?.variables.map((v) => (
+        {!d.variables.length && <option value="">Awaiting product metadata</option>}
+        {d.variables.map((v) => (
           <option key={v.name} value={v.name}>
             {v.label} ({v.units})
           </option>

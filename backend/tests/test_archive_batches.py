@@ -32,15 +32,15 @@ def test_archive_rejects_empty_oversized_and_duplicate_times():
 
 
 def test_only_catalogue_capacity_changes_not_per_product_work():
-    limits = PerformanceLimits(max_products=128)
+    limits = PerformanceLimits(max_products=640)
     assert limits.max_preparation_values == 8000000
     assert limits.max_time_steps == 12
     assert limits.max_product_file_bytes == 134217728
     with pytest.raises(ValidationError):
-        PerformanceLimits(max_products=129)
+        PerformanceLimits(max_products=641)
 
 
-def test_public_archive_catalogue_accepts_128_but_rejects_129_products():
+def test_public_archive_catalogue_accepts_640_but_rejects_641_products():
     from backend.app.schemas.products import Capabilities
 
     def catalogue(count):
@@ -74,6 +74,6 @@ def test_public_archive_catalogue_accepts_128_but_rejects_129_products():
             ],
         }
 
-    assert len(CatalogueResponse.model_validate(catalogue(128)).products) == 128
+    assert len(CatalogueResponse.model_validate(catalogue(640)).products) == 640
     with pytest.raises(ValidationError):
-        CatalogueResponse.model_validate(catalogue(129))
+        CatalogueResponse.model_validate(catalogue(641))

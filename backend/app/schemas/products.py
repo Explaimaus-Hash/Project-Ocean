@@ -57,7 +57,7 @@ class PerformanceLimits(Contract):
     max_response_bytes: int = Field(default=2097152, ge=1024, le=2097152)
     max_manifest_bytes: int = Field(default=524288, ge=1024, le=524288)
     max_product_file_bytes: int = Field(default=134217728, ge=1024, le=134217728)
-    max_products: int = Field(default=64, ge=1, le=128)
+    max_products: int = Field(default=64, ge=1, le=640)
 
 
 class VariableInfo(Contract):

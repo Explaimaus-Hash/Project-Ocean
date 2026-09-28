@@ -1,5 +1,10 @@
 # Ocean_2 working context
 
+- 2026-09-28 current user approval: expose all ten local BIO-ROMS variables over all 480 source times. Keep other-source/scientific policies unchanged; minimal documentation bullets only.
+- Operator command: `python -m scripts.prepare_bio_roms_archive --all-variables`; paired variables/four-date outputs retain 8M-value/128MiB limits. Chunk-reuse operator groups span at most 80 source times/20 outputs with <=16MiB decoded tiles and 256KiB output-variable caches. Catalogue capacity is 640; legacy SST/SSS products are reused, not overwritten.
+- Catalogue variable metadata/source checksum/version drive per-variable timestamp-to-product routing. MLD remains a scalar field, not a vertical coordinate; CHL and carbon units stay verbatim. Check completion via `scripts.verify_bio_roms_archive --all-variables` and the all-variable live browser test before claiming full coverage.
+- One interrupted serial-preparation stage was preserved under `data/interrupted-all-variables-20260928/`; original source and completed products were not removed. Earlier SST/SSS-only status below is superseded only after this extension's verification.
+
 ## All-date surface archive — 2026-09-28
 
 The user approved connecting every actual date in the downloaded BIO-ROMS V2 file to frontend viewing. Current implementation/preparation and verification are tracked in [the archive milestone](docs/BIO_ROMS_ARCHIVE.md). This supersedes earlier three-prepared-timestamp limits/status and no-new-preparation notes only for this local SST/SSS archive. No downloads, source/science-policy changes or comparison recomputation are authorized or implied.

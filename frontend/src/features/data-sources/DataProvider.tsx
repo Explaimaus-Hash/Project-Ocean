@@ -101,7 +101,9 @@ function useDataState() {
       if (first) dispatch({type:"select-observation",id:first.collection_id});
     }
   }, [catalogue.value,observations.value,selection.modelSource,selection.observationSource,dispatch]);
-  const mappedTime = dataset?.time_products?.find(t=>t.timestamp===selection.currentTime) ?? dataset?.time_products?.[0];
+  const catalogueVariable = dataset?.variables.find(v=>v.name===selection.variable)?.name ?? dataset?.variables[0]?.name;
+  const timelineProducts = dataset?.variable_time_products?.find(v=>v.variable===(catalogueVariable ?? selection.variable))?.times ?? dataset?.time_products;
+  const mappedTime = timelineProducts?.find(t=>t.timestamp===selection.currentTime) ?? timelineProducts?.[0];
   const selectedProductId = mappedTime?.product_id ?? dataset?.product_id;
   const product = useResource(
     `${root}:product:${selectedProductId}`,
@@ -115,10 +117,10 @@ function useDataState() {
   }, [root,metadata]);
   // Retain presentation context only for the same compatible archive group.
   // Requests still require the actual selected product metadata below.
-  const displayProduct = metadata ?? (previousMetadata?.root===root && previousMetadata.value.dataset_id===dataset?.dataset_id && mappedTime
+  const displayProduct = metadata ?? (previousMetadata?.root===root && previousMetadata.value.dataset_id===dataset?.dataset_id && mappedTime && (!catalogueVariable || previousMetadata.value.variables.some(v=>v.name===catalogueVariable))
     ? previousMetadata.value : undefined);
   const variable =
-    displayProduct?.variables.find((v) => v.name === selection.variable)?.name ??
+    catalogueVariable ?? displayProduct?.variables.find((v) => v.name === selection.variable)?.name ??
     displayProduct?.variables[0]?.name;
   const timestamp = metadata?.times.includes(selection.currentTime ?? "")
     ? selection.currentTime!
@@ -136,7 +138,8 @@ function useDataState() {
     dispatch,
   ]);
   const index = timestamp && metadata ? metadata.times.indexOf(timestamp) : 0;
-  const times = dataset?.time_products?.length ? dataset.time_products.map(t=>t.timestamp) : metadata?.times ?? [];
+  const variables = dataset?.variables.length ? dataset.variables : displayProduct?.variables ?? [];
+  const times = timelineProducts?.length ? timelineProducts.map(t=>t.timestamp) : metadata?.times ?? [];
   const timelineTimestamp = mappedTime?.timestamp ?? timestamp;
   const timelineIndex = timelineTimestamp ? Math.max(0,times.indexOf(timelineTimestamp)) : 0;
   const requestedBounds = viewportBounds ?? {
@@ -158,6 +161,7 @@ function useDataState() {
         s,
       );
       if (
+        value.variable !== variable || value.product_id !== metadata!.product_id ||
         value.timestamp !== metadata!.times[index] ||
         value.units !==
           metadata!.variables.find((v) => v.name === variable)?.units
@@ -165,7 +169,7 @@ function useDataState() {
         throw new ApiError("invalid_response");
       return value;
     },
-    !!metadata && !!variable && !!timestamp,
+    !!metadata && !!variable && !!timestamp && metadata.variables.some(v=>v.name===variable),
   );
   const [previous, setPrevious] = useState<{
     family: string;
@@ -182,7 +186,7 @@ function useDataState() {
     if (!frame.value || !metadata || !bounds || !variable) return;
     const nextTime = times[timelineIndex + 1];
     if (!nextTime) return;
-    const nextProduct = dataset?.time_products?.find(t=>t.timestamp===nextTime)?.product_id ?? metadata.product_id;
+    const nextProduct = timelineProducts?.find(t=>t.timestamp===nextTime)?.product_id ?? metadata.product_id;
     const controller = new AbortController();
     const timer = setTimeout(() => {
       void (async () => {
@@ -293,6 +297,7 @@ function useDataState() {
     product,
     displayProduct,
     variable,
+    variables,
     timestamp,
     index,
     times,
@@ -304,7 +309,7 @@ function useDataState() {
     retry: () => setRevision((v) => v + 1),
     selectDataset: (id: string) => dispatch({ type: "select-dataset", id }),
     selectVariable: (value: string) => {
-      if (metadata?.variables.some((v) => v.name === value))
+      if (variables.some((v) => v.name === value))
         dispatch({ type: "select-variable", value });
     },
     selectTime: (value: string) => {

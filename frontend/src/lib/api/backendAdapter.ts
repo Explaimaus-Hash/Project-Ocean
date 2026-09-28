@@ -40,22 +40,49 @@ export function adaptBackendResponse(path: string, value: unknown): unknown {
     return {schema_version:1,ready:v.status==="ready",reason:v.reason_code==null?(v.status==="ready"?"configured_surface_products_ready":"configured_surface_products_not_ready"):text(v.reason_code),required_products:list(v.checks,16).map(x=>text(record(x).product_id))};
   }
   if(route==="/api/v1/datasets") {
-    const products=list(v.products,128).map(record);
+    const products=list(v.products,640).map(record);
     return {schema_version:1,mode:"real",datasets:list(v.datasets,100).map(item=>{
-      const d=record(item), ids=list(d.product_ids,128).map(text);
-      const p=products.find(p=>p.status==="ready"&&p.product_id===ids[0]);
+      const d=record(item), ids=list(d.product_ids,640).map(text);
+      const ready=products.filter(q=>q.status==="ready"&&ids.includes(text(q.product_id))&&q.dataset_id===d.dataset_id);
+      const p=ready.find(q=>list(q.variables,4).includes("SST")) ?? ready[0];
       if(d.status==="ready"&&!p) fail();
-      // Merge only matching source, real/synthetic mode, variables and exact region.
-      // Keep a deterministic original product ID for every available source label.
-      const compatible=p?products.filter(q=>q.status==="ready" && ids.includes(text(q.product_id)) && q.dataset_id===d.dataset_id && q.data_mode===p.data_mode &&
+      // Different variable batches may join only with verified matching source
+      // checksum/version, real/synthetic mode and exact selected region.
+      const compatible=p?ready.filter(q=>q.data_mode===p.data_mode &&
         (q.product_id===p.product_id || (p.region!=null && JSON.stringify(q.region)===JSON.stringify(p.region) &&
-        JSON.stringify(list(q.variables,4).map(text).sort())===JSON.stringify(list(p.variables,4).map(text).sort())))):[];
+        (p.input_md5!=null ? (q.input_md5===p.input_md5 && q.source_version===p.source_version) :
+        JSON.stringify(list(q.variables,4).map(text).sort())===JSON.stringify(list(p.variables,4).map(text).sort()))))):[];
       const byTime=new Map<string,string>();
-      for(const q of compatible) for(const time of list(q.times,12).map(text)) if(!byTime.has(time)) byTime.set(time,text(q.product_id));
+      const byVariable=new Map<string,Map<string,string>>();
+      const variableMetadata=new Map<string,ReturnType<typeof variableList>[number]>();
+      for(const q of compatible) {
+        const names=list(q.variables,4).map(text);
+        if(q.variable_metadata!=null) {
+          const fields=variableList(q.variable_metadata);
+          if(fields.length!==names.length || fields.some(f=>!names.includes(f.name))) fail();
+          for(const field of fields) {
+            const previous=variableMetadata.get(field.name);
+            if(previous && JSON.stringify(previous)!==JSON.stringify(field)) fail();
+            variableMetadata.set(field.name,field);
+          }
+        }
+        for(const name of names) {
+          const axis=byVariable.get(name) ?? new Map<string,string>();
+          for(const time of list(q.times,12).map(text)) if(!axis.has(time)) axis.set(time,text(q.product_id));
+          byVariable.set(name,axis);
+        }
+        // Legacy primary-variable timeline remains available to older consumers.
+        if(list(p!.variables,4).every(name=>names.includes(text(name))))
+          for(const time of list(q.times,12).map(text)) if(!byTime.has(time)) byTime.set(time,text(q.product_id));
+      }
       const times=[...byTime.keys()].sort();
+      const order=["SST","SSS","MLD","CHL","DIC","NO3","pCO2_Original","pCO2_Clim","pCO2_Int","Deviant_uncertainty"];
+      const fields=[...variableMetadata.values()].sort((a,b)=>(order.indexOf(a.name)<0?99:order.indexOf(a.name))-(order.indexOf(b.name)<0?99:order.indexOf(b.name)) || a.name.localeCompare(b.name));
       return {schema_version:1,mode:p?mode(p.data_mode):"real",dataset_id:text(d.dataset_id),source_name:text(d.source_id),name:text(d.title),
         status:d.status==="ready"?"prepared":text(d.status),product_id:p?text(p.product_id):null,
-        variables:[],time_products:times.map(timestamp=>({timestamp,product_id:byTime.get(timestamp)!})),capabilities:p?capabilities(p.capabilities):noCapabilities,
+        variables:fields,time_products:times.map(timestamp=>({timestamp,product_id:byTime.get(timestamp)!})),
+        variable_time_products:[...byVariable].map(([variable,axis])=>({variable,times:[...axis.keys()].sort().map(timestamp=>({timestamp,product_id:axis.get(timestamp)!}))})),
+        capabilities:p?capabilities(p.capabilities):noCapabilities,
         time_coverage:times.length?{start:times[0],end:times[times.length-1]}:null};
     })};
   }

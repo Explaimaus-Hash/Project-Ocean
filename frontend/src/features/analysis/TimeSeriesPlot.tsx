@@ -30,7 +30,7 @@ export function TimeSeriesPlot({
           connectgaps: false,
           line: { color: "#59d9e8", width: 1.5, shape: "linear" },
           marker: { size: 5, color: "#59d9e8" },
-          hovertemplate: `%{x|%Y-%m-%d %H:%M UTC}<br>${metadata.quantity}: %{y:.4f} ${data.units}<extra></extra>`,
+          hovertemplate: `%{x|%Y-%m-%d %H:%M UTC}<br>${metadata.quantity}: %{y:.6g} ${data.units}<extra></extra>`,
         },
       ]}
       layout={{

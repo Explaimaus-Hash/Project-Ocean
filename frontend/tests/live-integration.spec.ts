@@ -237,6 +237,53 @@ test("reduced motion skips source-frame crossfade",async({page})=>{
   await expect(bar).toHaveAttribute("data-observed-fade","no");
 });
 
+test("all ten BIO-ROMS variables have real globe frames and scientific analysis",async({page})=>{
+  test.setTimeout(150000);
+  const errors:string[]=[];page.on("pageerror",error=>errors.push(error.message));
+  const client=new DataClient({baseUrl:"http://127.0.0.1:8000",adapt:adaptBackendResponse});
+  const dataset=(await client.getDatasets()).datasets.find(d=>d.dataset_id==="incois_bio_roms_v2")!;
+  expect(dataset.variables.map(v=>v.name)).toEqual(["SST","SSS","MLD","CHL","DIC","NO3","pCO2_Original","pCO2_Clim","pCO2_Int","Deviant_uncertainty"]);
+  await page.goto("/explorer");
+  await expect(page.locator("#variable option")).toHaveCount(10);
+  for(const variable of dataset.variables) {
+    expect(dataset.variable_time_products!.find(v=>v.variable===variable.name)!.times).toHaveLength(480);
+    await page.locator("#variable").selectOption(variable.name);
+    const bar=page.locator(".scientific-colorbar");
+    await expect(bar).toHaveAttribute("data-variable",variable.name);
+    await expect(bar.locator("strong")).toContainText(variable.label);
+    await expect(bar.locator("strong")).toContainText(variable.units);
+    await expect(bar).toHaveAttribute("data-timestamp","1980-01-24T00:00:00Z");
+  }
+  await page.getByRole("link",{name:/Analysis/}).click();
+  for(const variable of dataset.variables) {
+    await page.getByLabel("Analysis quantity",{exact:true}).selectOption(variable.name);
+    await expect(page.locator(".scientific-plot-shell h2")).toContainText(variable.label);
+    await expect(page.locator(".scientific-plot-shell .ytitle")).toHaveText(`${variable.name} (${variable.units})`);
+  }
+  await page.getByLabel("Analysis quantity",{exact:true}).selectOption("CHL");
+  await expect(page.locator(".scientific-plot-shell .ytitle")).toHaveText("CHL (kg/m3)");
+  await page.locator(".scientific-plot-shell").screenshot({path:"test-results/bio-roms-chlorophyll.png"});
+  await page.getByRole("link",{name:/Explorer/}).click();
+  await page.locator("#dataset-time").selectOption("2019-12-25T00:00:00Z");
+  await expect(page.locator(".scientific-colorbar")).toHaveAttribute("data-timestamp","2019-12-25T00:00:00Z");
+  await page.locator("#variable").selectOption("pCO2_Int");
+  await expect(page.locator(".scientific-colorbar")).toHaveAttribute("data-variable","pCO2_Int");
+  await expect(page.locator(".scientific-colorbar")).toHaveAttribute("data-timestamp","2019-12-25T00:00:00Z");
+  expect(errors).toEqual([]); client.clear();
+});
+
+test("variable-specific batch mapping requires the same source checksum and version",()=>{
+  const cap={surface:true,timeseries:true};
+  const metadata=(name:string,units:string)=>({[name]:{source_name:name,long_name:name,units}});
+  const base={product_id:"p_a",dataset_id:"d",status:"ready",data_mode:"real",variables:["SST"],variable_metadata:metadata("SST","deg C"),input_md5:"a".repeat(32),source_version:"v2",times:["1980-01-24T00:00:00Z"],capabilities:cap,region:{west:30,east:120,south:-30,north:30}};
+  const products=[base,{...base,product_id:"p_b",variables:["CHL"],variable_metadata:metadata("CHL","kg/m3")},
+    {...base,product_id:"p_c",variables:["NO3"],variable_metadata:metadata("NO3","milimole/m3"),input_md5:"b".repeat(32)},
+    {...base,product_id:"p_d",variables:["DIC"],variable_metadata:metadata("DIC","milimole/m3"),source_version:"v1"}];
+  const adapted=adaptBackendResponse("/api/v1/datasets",{schema_version:1,products,datasets:[{dataset_id:"d",source_id:"s",title:"Fixture",status:"ready",product_ids:products.map(p=>p.product_id)}]}) as {datasets:{variables:{name:string}[];variable_time_products:{variable:string;times:{product_id:string}[]}[]}[]};
+  expect(adapted.datasets[0].variables.map(v=>v.name)).toEqual(["SST","CHL"]);
+  expect(adapted.datasets[0].variable_time_products.find(v=>v.variable==="CHL")!.times[0].product_id).toBe("p_b");
+});
+
 test("analysis metadata and short axis labels fit narrow and wide graph panels",async({page})=>{
   const errors:string[]=[];page.on("pageerror",error=>errors.push(error.message));
   await page.goto("/analysis");

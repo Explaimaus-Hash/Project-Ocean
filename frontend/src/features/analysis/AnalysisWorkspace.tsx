@@ -137,11 +137,11 @@ export function AnalysisWorkspace() {
           Quantity
           <select
             aria-label="Analysis quantity"
-            disabled={!product}
+            disabled={!d.variables.length}
             value={d.variable ?? ""}
             onChange={(e) => d.selectVariable(e.target.value)}
           >
-            {product?.variables.map((v) => (
+            {d.variables.map((v) => (
               <option key={v.name} value={v.name}>
                 {v.label} ({v.units})
               </option>

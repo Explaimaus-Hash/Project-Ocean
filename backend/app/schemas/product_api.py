@@ -84,7 +84,7 @@ class DatasetSummary(Contract):
     reason_code: Literal[
         "prepared_selection_available", "no_prepared_product", "adapter_not_implemented"
     ]
-    product_ids: list[Identifier] = Field(max_length=128)
+    product_ids: list[Identifier] = Field(max_length=640)
 
     @model_validator(mode="after")
     def consistent_status(self) -> "DatasetSummary":
@@ -111,6 +111,23 @@ class ReadyProductSummary(Contract):
     times: TimeAxis
     capabilities: Capabilities
     region: Region | None = None
+    variable_metadata: dict[VariableName, VariableInfo] | None = Field(
+        default=None, max_length=4
+    )
+    input_md5: str | None = Field(default=None, pattern=r"^[a-f0-9]{32}$")
+    source_version: str | None = Field(default=None, max_length=128)
+
+    @model_validator(mode="after")
+    def consistent_variable_metadata(self) -> "ReadyProductSummary":
+        if self.variable_metadata is not None and (
+            set(self.variable_metadata) != set(self.variables)
+            or any(
+                name != info.source_name
+                for name, info in self.variable_metadata.items()
+            )
+        ):
+            raise ValueError("Catalogue variable metadata differs from variables")
+        return self
 
 
 class UnpreparedProductSummary(Contract):
@@ -126,7 +143,7 @@ ProductSummary = Annotated[
 
 class CatalogueResponse(VersionedResponse):
     datasets: list[DatasetSummary] = Field(min_length=1, max_length=100)
-    products: list[ProductSummary] = Field(max_length=128)
+    products: list[ProductSummary] = Field(max_length=640)
 
     @model_validator(mode="after")
     def consistent_products(self) -> "CatalogueResponse":

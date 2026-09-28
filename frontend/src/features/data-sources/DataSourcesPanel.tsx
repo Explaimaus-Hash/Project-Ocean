@@ -17,7 +17,7 @@ export function DataSourcesPanel() {
           </small>
           <small>
             Variables:{" "}
-            {(d.product.value?.dataset_id === v.dataset_id ? d.product.value.variables : v.variables).map((x) => `${x.name} (${x.units})`).join(", ") || "Select a prepared product to inspect variable metadata"}
+            {(v.variables.length ? v.variables : d.product.value?.dataset_id === v.dataset_id ? d.product.value.variables : []).map((x) => `${x.name} (${x.units})`).join(", ") || "Select a prepared product to inspect variable metadata"}
           </small>
           <small>
             Capabilities:{" "}

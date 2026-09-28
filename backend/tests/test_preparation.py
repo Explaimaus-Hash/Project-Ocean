@@ -97,6 +97,97 @@ def source_root(tmp_path):
     return tmp_path
 
 
+def test_archive_group_matches_raw_and_reuses_without_overwrite(source_root):
+    from backend.app.processing.archive_bio_roms import prepare_archive_group
+
+    requests = [
+        selection(start_date=date(2019, month, 1), end_date=date(2019, month, 28))
+        for month in (1, 2, 3)
+    ]
+    before = (source_root / "data/raw/v2.nc").read_bytes()
+    products = prepare_archive_group(requests, source_root, data_mode="synthetic")
+    assert len(products) == 3
+    with netCDF4.Dataset(source_root / "data/raw/v2.nc") as source:
+        for i, product in enumerate(products):
+            with netCDF4.Dataset(
+                source_root / f"data/processed/{product.product_id}/fields.nc"
+            ) as output:
+                for name in ("SST", "SSS"):
+                    np.testing.assert_equal(
+                        output[name][:].filled(np.nan),
+                        source[name][i : i + 1].filled(np.nan),
+                    )
+            with netCDF4.Dataset(
+                source_root / f"data/cache/{product.product_id}/preview.nc"
+            ) as output:
+                for name in ("SST", "SSS"):
+                    np.testing.assert_equal(
+                        output[name][:].filled(np.nan),
+                        source[name][
+                            i : i + 1,
+                            :: product.preview_stride,
+                            :: product.preview_stride,
+                        ].filled(np.nan),
+                    )
+    assert (
+        prepare_archive_group(requests, source_root, data_mode="synthetic") == products
+    )
+    assert before == (source_root / "data/raw/v2.nc").read_bytes()
+    for invalid in (
+        [],
+        requests * 7,
+        [requests[0], requests[0]],
+        [requests[0], selection(variables=["SST"])],
+    ):
+        with pytest.raises(ProductError):
+            prepare_archive_group(invalid, source_root, data_mode="synthetic")
+
+
+def test_publication_retries_only_transient_windows_locks(tmp_path, monkeypatch):
+    source, destination = tmp_path / "stage", tmp_path / "final"
+    source.mkdir()
+    original = Path.rename
+    attempts, delays = [], []
+
+    def locked(path, target):
+        attempts.append(path)
+        if len(attempts) < 3:
+            error = PermissionError("Synthetic Windows sharing lock")
+            error.winerror = 5
+            raise error
+        return original(path, target)
+
+    monkeypatch.setattr(Path, "rename", locked)
+    monkeypatch.setattr(prep, "sleep", delays.append)
+    prep._publish_directory(source, destination)
+    assert len(attempts) == 3 and delays == [0.1, 0.2]
+    assert destination.is_dir() and not source.exists()
+    with pytest.raises(ProductError, match="Another operator"):
+        prep._publish_directory(source, destination)
+
+
+@pytest.mark.parametrize("winerror, expected_attempts", [(32, 8), (5, 8), (None, 1)])
+def test_publication_lock_retry_is_bounded(
+    tmp_path, monkeypatch, winerror, expected_attempts
+):
+    source, destination = tmp_path / "stage", tmp_path / "final"
+    source.mkdir()
+    attempts = []
+
+    def locked(path, target):
+        attempts.append(path)
+        error = PermissionError("Synthetic permanent failure")
+        error.winerror = winerror
+        raise error
+
+    monkeypatch.setattr(Path, "rename", locked)
+    monkeypatch.setattr(prep, "sleep", lambda _: None)
+    with pytest.raises(PermissionError):
+        prep._publish_directory(source, destination)
+    assert len(attempts) == expected_attempts
+    assert source.is_dir() and not destination.exists()
+
+
 def test_prepare_preserves_decoded_values_masks_and_axes(source_root):
     raw = source_root / "data/raw/v2.nc"
     before = raw.read_bytes()
@@ -471,3 +562,33 @@ def test_archive_tile_boundaries_preserve_every_native_and_preview_value(
                 preview[name][:].filled(np.nan),
                 expected[:, :: manifest.preview_stride, :: manifest.preview_stride],
             )
+    from backend.app.processing.archive_bio_roms import prepare_archive_group
+
+    requests = [
+        selection(
+            region=Region(west=32, east=41, south=-3, north=4),
+            start_date=date(2019, m, 1),
+            end_date=date(2019, m, 28),
+        )
+        for m in (1, 2, 3)
+    ]
+    products = prepare_archive_group(requests, source_root, data_mode="synthetic")
+    with netCDF4.Dataset(raw) as source:
+        for i, product in enumerate(products):
+            with (
+                netCDF4.Dataset(
+                    source_root / f"data/processed/{product.product_id}/fields.nc"
+                ) as output,
+                netCDF4.Dataset(
+                    source_root / f"data/cache/{product.product_id}/preview.nc"
+                ) as preview,
+            ):
+                for name in ("SST", "SSS"):
+                    expected = source[name][i : i + 1, 2:10, 2:12].filled(np.nan)
+                    np.testing.assert_equal(output[name][:].filled(np.nan), expected)
+                    np.testing.assert_equal(
+                        preview[name][:].filled(np.nan),
+                        expected[
+                            :, :: product.preview_stride, :: product.preview_stride
+                        ],
+                    )

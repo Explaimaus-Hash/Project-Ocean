@@ -171,6 +171,12 @@ class ProductStore:
                         "times": manifest.times,
                         "capabilities": manifest.capabilities.model_dump(),
                         "region": manifest.selection.region.model_dump(),
+                        "variable_metadata": {
+                            name: info.model_dump()
+                            for name, info in manifest.variables.items()
+                        },
+                        "input_md5": manifest.input_md5,
+                        "source_version": manifest.source_version,
                     }
                 )
             except ProductError as error:

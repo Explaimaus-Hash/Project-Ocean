@@ -279,6 +279,7 @@ export function ScalarGlobeLayer() {
       className="scientific-colorbar"
       aria-label="Scientific colorbar"
       data-product={info.frame.product_id}
+      data-variable={info.frame.variable}
       data-timestamp={info.frame.timestamp}
       data-min={info.scale.min}
       data-max={info.scale.max}
