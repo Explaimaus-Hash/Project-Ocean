@@ -301,31 +301,36 @@ export function ScalarGlobeLayer() {
           <span key={i}>{Number(t.toPrecision(4))}</span>
         ))}
       </div>
-      <small>
-        <span className="missing-swatch" /> Missing / land: transparent ·{" "}
-        {info.scale.log ? "Log" : "Linear"}
+      <small className="colorbar-dataset">
+        Dataset: {d.displayProduct?.source_name ?? "incois_bio_roms"}
       </small>
-      <small>
-        {info.frame.mode === "synthetic" ? "SYNTHETIC DEMO · " : ""}
-        {info.frame.display_only ? "Preview" : "Scientific quality"} ·{" "}
-        {info.frame.longitude.length}×{info.frame.latitude.length} frame cells
-      </small>
-      <small>
-        {d.displayProduct?.source_name} · {info.frame.product_id} · Palette:{" "}
-        {info.scale.palette}
-      </small>
-      <time dateTime={info.frame.timestamp}>{info.frame.timestamp}</time>
-      {blending && <small role="status">Visual fade: {blending.from} → {blending.to} · display only, not intermediate measurements</small>}
-      <small role="status">
-        {d.frame.error || d.product.error
-          ? "Frame request failed — previous frame shown"
-          : blending
-            ? "Transitioning to next source frame"
-          : loading
-            ? "Loading next frame — previous timestamp retained"
-            : s.renderError || "Displayed frame"}{" "}
-        · {info.interpolation} display
-      </small>
+      <div className="visually-hidden">
+        <small>
+          <span className="missing-swatch" /> Missing / land: transparent ·{" "}
+          {info.scale.log ? "Log" : "Linear"}
+        </small>
+        <small>
+          {info.frame.mode === "synthetic" ? "SYNTHETIC DEMO · " : ""}
+          {info.frame.display_only ? "Preview" : "Scientific quality"} ·{" "}
+          {info.frame.longitude.length}×{info.frame.latitude.length} frame cells
+        </small>
+        <small>
+          {d.displayProduct?.source_name} · {info.frame.product_id} · Palette:{" "}
+          {info.scale.palette}
+        </small>
+        <time dateTime={info.frame.timestamp}>{info.frame.timestamp}</time>
+        {blending && <small role="status">Visual fade: {blending.from} → {blending.to} · display only, not intermediate measurements</small>}
+        <small role="status">
+          {d.frame.error || d.product.error
+            ? "Frame request failed — previous frame shown"
+            : blending
+              ? "Transitioning to next source frame"
+            : loading
+              ? "Loading next frame — previous timestamp retained"
+              : s.renderError || "Displayed frame"}{" "}
+          · {info.interpolation} display
+        </small>
+      </div>
     </aside>
   );
 }

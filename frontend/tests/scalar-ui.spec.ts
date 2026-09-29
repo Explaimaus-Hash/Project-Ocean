@@ -54,7 +54,7 @@ test("oversized scientific requests recover to labeled preview and mobile colorb
   await expect(page.locator(".scientific-colorbar")).toContainText("Preview");
   await page.setViewportSize({ width: 1800, height: 1000 });
   const gradient = await page.locator(".colorbar-gradient").boundingBox();
-  expect(gradient!.height).toBeGreaterThan(gradient!.width);
+  expect(gradient!.width).toBeGreaterThan(gradient!.height);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page
