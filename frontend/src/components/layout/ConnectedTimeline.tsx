@@ -2,12 +2,13 @@
 import { useData } from "@/features/data-sources/DataProvider";
 import { useScalar } from "@/features/scalar/ScalarContext";
 import { BottomTimeline } from "./BottomTimeline";
-export function ConnectedTimeline() {
+export function ConnectedTimeline({ hidden = false }: { hidden?: boolean }) {
   const d = useData();
   const s = useScalar();
   return (
     <BottomTimeline
       key={d.dataset?.dataset_id ?? "unavailable"}
+      hidden={hidden}
       frames={d.times}
       currentIndex={d.timelineIndex}
       displayedTimestamp={

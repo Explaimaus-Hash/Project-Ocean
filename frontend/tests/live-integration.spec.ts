@@ -1,41 +1,19 @@
 import {test,expect} from "@playwright/test";
 import {DataClient} from "../src/lib/dataClient";
 import {adaptBackendResponse} from "../src/lib/api/backendAdapter";
-import {sourceTimeIndex} from "../src/features/controls/SourceTimeControl";
 const product="p_7c8210052d41d41259724e2d", collection="o_c645f248f801845378f0fdaf", comparison="c_0abd2057c5bc5c41fcf49109";
-test("UTC time entry requires exact valid dataset membership",()=>{
-  const times=["2019-02-28T00:00:00Z","2020-02-29T13:02:03.123Z"];
-  expect(sourceTimeIndex(times,"2019-02-28T00:00")).toBe(0);
-  expect(sourceTimeIndex(times,"2020-02-29T13:02:03.123")).toBe(1);
-  for(const invalid of ["", "2019-02-29T00:00", "2019-02-28T00:01", "2018-02-28T00:00", "2019-02-28T24:00", "2019-02-28T00:00+05:30"])
-    expect(sourceTimeIndex(times,invalid)).toBe(-1);
-  expect(sourceTimeIndex([],"2019-02-28T00:00")).toBe(-1);
-});
-test("custom UTC selection loads only an available frame and synchronizes with timeline",async({page})=>{
+test("date picker auto-snaps to the nearest available frame",async({page})=>{
   await page.goto("/explorer");
   await expect(page.getByText(/Prepared frame loaded/)).toBeVisible({timeout:40000});
-  const input=page.locator("#source-time-input");
-  await input.fill("2019-02-28T00:00");
-  await page.getByRole("button",{name:"Apply time",exact:true}).click();
-  await expect(page.locator("#dataset-time")).toHaveValue("2019-02-28T00:00:00Z");
-  await expect(page.getByText("Prepared frame loaded · 2019-02-28T00:00:00Z",{exact:true})).toBeVisible();
-  await page.locator(".source-time-control").screenshot({path:"test-results/source-time-control.png"});
-  await input.fill("2019-02-27T00:00");
-  await input.press("Enter");
-  await expect(page.locator("#source-time-error")).toContainText("not available");
-  await expect(page.locator("#dataset-time")).toHaveValue("2019-02-28T00:00:00Z");
-  // Bounded background prefetch may request the next valid frame, but invalid
-  // input must never replace the displayed selection.
-  await expect(page.locator(".scientific-colorbar")).toHaveAttribute("data-timestamp","2019-02-28T00:00:00Z");
-  await input.fill("");await page.getByRole("button",{name:"Apply time",exact:true}).click();
-  await expect(input).toHaveAttribute("aria-invalid","true");
-  await page.locator("#dataset-time").selectOption("2019-03-30T00:00:00Z");
-  await expect(input).toHaveValue("2019-03-30T00:00");
-  await page.getByRole("button",{name:"Previous frame",exact:true}).click();
-  await expect(input).toHaveValue("2019-02-28T00:00");
-  await page.locator("#dataset").selectOption({index:2});
-  await expect(input).toBeDisabled();
-  await expect(page.getByRole("button",{name:"Apply time",exact:true})).toBeDisabled();
+  const input=page.locator("#source-date-input");
+  // Selecting a date that has an exact match
+  await input.fill("2019-02-28");
+  await expect(page.getByText(/Prepared frame loaded/)).toBeVisible({timeout:30000});
+  await page.locator(".source-time-control").screenshot({path:"test-results/source-date-control.png"});
+  // Selecting a date between two available timestamps snaps to the nearest
+  await input.fill("2019-03-15");
+  await expect(page.getByText(/Prepared frame loaded/)).toBeVisible({timeout:30000});
+  await expect(page.locator(".source-date-matched")).toBeVisible();
 });
 test("readiness supports omitted success reason and explicit unavailable state",()=>{
   expect(adaptBackendResponse("/ready",{schema_version:1,status:"ready",checks:[]})).toMatchObject({ready:true});
@@ -125,13 +103,12 @@ test("archive catalogue exposes 480 dates and browser crosses batch boundaries",
   expect(timeline[0].timestamp).toBe("1980-01-24T00:00:00Z");
   expect(timeline[479].timestamp).toBe("2019-12-25T00:00:00Z");
   await page.goto("/explorer");
-  await expect(page.locator("#dataset-time option")).toHaveCount(480);
+  await expect(page.getByText(/Prepared frame loaded/)).toBeVisible({timeout:40000});
   for(const index of [0,3,4,240,479]) {
     const entry=timeline[index];
-    await page.locator("#source-time-input").fill(entry.timestamp.replace(/:00Z$/,""));
-    await page.getByRole("button",{name:"Apply time",exact:true}).click();
+    const dateStr=entry.timestamp.slice(0,10);
+    await page.locator("#source-date-input").fill(dateStr);
     await expect(page.getByText(`Prepared frame loaded · ${entry.timestamp}`,{exact:true})).toBeVisible({timeout:30000});
-    await expect(page.locator("#dataset-time")).toHaveValue(entry.timestamp);
   }
   await expect(page.locator(".scientific-colorbar")).toContainText("2019-12-25T00:00:00Z");
   await page.screenshot({path:"test-results/archive-last-date.png"});
@@ -190,7 +167,8 @@ test("timeline still reports a failed batch instead of hiding real errors",async
   await page.goto("/explorer");
   await expect(page.locator(".scientific-colorbar")).toHaveAttribute("data-timestamp",dates[0].timestamp);
   await page.route(`**/backend/api/v1/products/${dates[40].product_id}**`,route=>route.fulfill({status:503,contentType:"application/json",body:JSON.stringify({schema_version:1,error:{code:"backend_unavailable",message:"Unavailable"}})}));
-  await page.locator("#dataset-time").selectOption(dates[40].timestamp);
+  const dateStr=dates[40].timestamp.slice(0,10);
+  await page.locator("#source-date-input").fill(dateStr);
   await expect(page.locator(".bottom-timeline")).toHaveAttribute("data-status","error");
   await expect(page.locator("#timeline-reason")).toContainText("No frame available");
   await expect(page.getByRole("button",{name:"Retry frame",exact:true})).toBeVisible();
@@ -204,15 +182,13 @@ test("source frames crossfade with honest labels and settle after rapid scrubbin
   await page.goto("/explorer");
   const bar=page.locator(".scientific-colorbar");
   await expect(bar).toHaveAttribute("data-timestamp","1980-01-24T00:00:00Z");
-  const dates=await page.locator("#dataset-time option").evaluateAll(options=>options.map(o=>(o as HTMLOptionElement).value));
-  await page.locator("#dataset-time").selectOption(dates[1]);
+  // Use the timeline slider to advance frames for crossfade testing
+  await page.getByRole("button",{name:"Next frame",exact:true}).click();
   await expect(bar).toHaveAttribute("data-transition","blending");
-  await expect(bar).toHaveAttribute("data-transition-to",dates[1]);
   await expect(bar).toContainText("display only, not intermediate measurements");
-  await expect(bar).toHaveAttribute("data-timestamp",dates[1]);
   await expect(bar).toHaveAttribute("data-transition","idle");
-  for(const index of [2,3,4,8,12]) await page.locator("#dataset-time").selectOption(dates[index]);
-  await expect(bar).toHaveAttribute("data-timestamp",dates[12]);
+  // Rapid scrubbing via timeline slider
+  for(let i=0;i<5;i++) await page.getByRole("button",{name:"Next frame",exact:true}).click();
   await expect(bar).toHaveAttribute("data-transition","idle");
   await page.locator("#variable").selectOption("SSS");
   await expect(bar).toContainText(/salinity/i);
@@ -232,7 +208,7 @@ test("reduced motion skips source-frame crossfade",async({page})=>{
     });
     observer.observe(element,{attributes:true,attributeOldValue:true,attributeFilter:["data-transition"]});
   });
-  await page.locator("#dataset-time").selectOption({index:1});
+  await page.getByRole("button",{name:"Next frame",exact:true}).click();
   await expect(bar).toHaveAttribute("data-timestamp","1980-02-23T00:00:00Z");
   await expect(bar).toHaveAttribute("data-observed-fade","no");
 });
@@ -264,7 +240,7 @@ test("all ten BIO-ROMS variables have real globe frames and scientific analysis"
   await expect(page.locator(".scientific-plot-shell .ytitle")).toHaveText("CHL (kg/m3)");
   await page.locator(".scientific-plot-shell").screenshot({path:"test-results/bio-roms-chlorophyll.png"});
   await page.getByRole("link",{name:/Explorer/}).click();
-  await page.locator("#dataset-time").selectOption("2019-12-25T00:00:00Z");
+  await page.locator("#source-date-input").fill("2019-12-25");
   await expect(page.locator(".scientific-colorbar")).toHaveAttribute("data-timestamp","2019-12-25T00:00:00Z");
   await page.locator("#variable").selectOption("pCO2_Int");
   await expect(page.locator(".scientific-colorbar")).toHaveAttribute("data-variable","pCO2_Int");

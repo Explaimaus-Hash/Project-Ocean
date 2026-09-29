@@ -103,7 +103,7 @@ export function SelectionControls() {
         </ScientificTooltip>
       </div>
       <SourceTimeControl
-        key={JSON.stringify([d.dataset?.dataset_id, d.timelineTimestamp])}
+        key={d.dataset?.dataset_id ?? "none"}
         times={d.times}
         timestamp={d.timelineTimestamp}
         onSelect={d.selectTime}

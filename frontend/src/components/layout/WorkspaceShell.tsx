@@ -37,6 +37,7 @@ function Shell({ children }: { children: ReactNode }) {
   const analysis = pathname === "/analysis";
   const comparison = pathname === "/comparison";
   const sources = pathname === "/data-sources";
+  const hideTimeline = comparison || sources;
   const [split, setSplit] = useState(45);
   const container = useRef<HTMLElement>(null);
   const dragging = useRef(false);
@@ -48,8 +49,9 @@ function Shell({ children }: { children: ReactNode }) {
         Skip to workspace
       </a>
       <div
-        className={`workspace-shell ${analysis ? "analysis-mode" : ""} ${comparison || sources ? "comparison-mode-layout" : ""}`}
+        className={`workspace-shell ${analysis ? "analysis-mode" : ""} ${comparison || sources ? "comparison-mode-layout" : ""} ${hideTimeline ? "timeline-hidden" : ""}`}
         data-launch={status}
+        data-timeline-hidden={hideTimeline ? "true" : "false"}
         style={{ "--analysis-globe": `${split}%` } as CSSProperties}
       >
         <TopBar />
@@ -57,7 +59,7 @@ function Shell({ children }: { children: ReactNode }) {
         <main id="workspace" tabIndex={-1} ref={container}>
           <ContextPanel>
             {analysis || comparison || sources ? (
-              <WorkspacePanel route={routes[comparison ? 3 : 1]} />
+              <WorkspacePanel route={routes[sources ? 4 : comparison ? 3 : 1]} />
             ) : (
               children
             )}
@@ -115,7 +117,7 @@ function Shell({ children }: { children: ReactNode }) {
             {(comparison || sources) && children}
           </section>
         </main>
-        <ConnectedTimeline />
+        <ConnectedTimeline hidden={hideTimeline} />
       </div>
     </>
   );

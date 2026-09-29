@@ -9,6 +9,7 @@ export interface TimelineProps {
   onRetry?: () => void;
   mode?: "real" | "synthetic";
   onFrameSelect?: (index: number) => void;
+  hidden?: boolean;
 }
 const EMPTY_FRAMES: readonly string[] = [];
 export function BottomTimeline({
@@ -19,10 +20,16 @@ export function BottomTimeline({
   displayedTimestamp,
   onRetry,
   mode = "real",
+  hidden = false,
 }: TimelineProps) {
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [failed, setFailed] = useState<number[]>([]);
+  useEffect(() => {
+    if (hidden && playing) {
+      setPlaying(false);
+    }
+  }, [hidden, playing]);
   useEffect(() => {
     if (status === "error") {
       setPlaying(false);
@@ -58,7 +65,13 @@ export function BottomTimeline({
           ? "Loading frame metadata"
           : "Connect a prepared dataset to enable time controls.";
   return (
-    <footer className="bottom-timeline" aria-label="Time controls" data-status={status}>
+    <footer
+      className={`bottom-timeline ${hidden ? "timeline-collapsed" : ""}`}
+      aria-label="Time controls"
+      data-status={status}
+      data-hidden={hidden ? "true" : "false"}
+      aria-hidden={hidden}
+    >
       <div className="timeline-caption" aria-busy={status === "loading" || status === "buffering"}>
         <Clock3 size={16} />
         <div>

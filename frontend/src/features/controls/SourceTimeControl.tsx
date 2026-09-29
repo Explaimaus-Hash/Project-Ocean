@@ -1,14 +1,51 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { Calendar, ArrowRight } from "lucide-react";
 
-/** UTC wall-clock input, never local timezone, nearest-date snapping or interpolation. */
-export function sourceTimeIndex(times: readonly string[], draft: string): number {
-  const match = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(?::(\d{2})(?:\.(\d{1,3}))?)?$/.exec(draft);
-  if (!match) return -1;
-  const canonical = `${match[1]}T${match[2]}:${match[3] ?? "00"}.${(match[4] ?? "").padEnd(3, "0")}Z`;
-  const milliseconds = Date.parse(canonical);
-  if (!Number.isFinite(milliseconds) || new Date(milliseconds).toISOString() !== canonical) return -1;
-  return times.findIndex((time) => Date.parse(time) === milliseconds);
+/**
+ * Given the full list of available ISO-8601 source timestamps and a target
+ * date string (YYYY-MM-DD), return the index of the timestamp whose date is
+ * closest (by absolute millisecond distance) to midnight UTC of that date.
+ * Returns -1 when `times` is empty or `targetDate` is unparseable.
+ */
+function findClosestTimeIndex(times: readonly string[], targetDate: string): number {
+  if (!times.length) return -1;
+  const target = Date.parse(`${targetDate}T00:00:00.000Z`);
+  if (!Number.isFinite(target)) return -1;
+
+  let best = 0;
+  let bestDiff = Math.abs(Date.parse(times[0]) - target);
+
+  for (let i = 1; i < times.length; i++) {
+    const diff = Math.abs(Date.parse(times[i]) - target);
+    if (diff < bestDiff) {
+      best = i;
+      bestDiff = diff;
+    }
+  }
+  return best;
+}
+
+/** Extract YYYY-MM-DD from an ISO timestamp. */
+function toDateString(iso: string | undefined): string {
+  if (!iso) return "";
+  return iso.slice(0, 10);
+}
+
+/** Format an ISO timestamp to a human-friendly display string. */
+function formatTimestamp(iso: string): string {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString("en-US", {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      timeZone: "UTC",
+    });
+  } catch {
+    return iso.slice(0, 10);
+  }
 }
 
 export function SourceTimeControl({ times, timestamp, onSelect }: {
@@ -16,44 +53,59 @@ export function SourceTimeControl({ times, timestamp, onSelect }: {
   timestamp?: string;
   onSelect: (timestamp: string) => void;
 }) {
-  const [draft, setDraft] = useState(timestamp?.replace(/Z$/, "") ?? "");
-  const [error, setError] = useState("");
   const available = times.length > 0;
-  const apply = () => {
-    const index = sourceTimeIndex(times, draft);
-    if (index < 0) {
-      setError("This time is not available in the selected prepared dataset. Choose an available source time below. Current selection is unchanged.");
-      return;
-    }
-    setError("");
-    onSelect(times[index]);
+
+  // Derive min/max date bounds from the available timestamps
+  const { minDate, maxDate } = useMemo(() => {
+    if (!times.length) return { minDate: "", maxDate: "" };
+    return {
+      minDate: toDateString(times[0]),
+      maxDate: toDateString(times[times.length - 1]),
+    };
+  }, [times]);
+
+  const [draft, setDraft] = useState(toDateString(timestamp));
+
+  const handleDateChange = (dateValue: string) => {
+    setDraft(dateValue);
+    if (!dateValue || !available) return;
+    const idx = findClosestTimeIndex(times, dateValue);
+    if (idx >= 0) onSelect(times[idx]);
   };
+
+  const currentDateStr = toDateString(timestamp);
+  const matchedDisplay = timestamp ? formatTimestamp(timestamp) : null;
+
   return (
     <div className="source-time-control">
-      <label htmlFor="source-time-input">TIME · SOURCE UTC</label>
-      <input
-        id="source-time-input"
-        type="datetime-local"
-        step="0.001"
-        value={draft}
-        disabled={!available}
-        aria-describedby="source-time-help source-time-error"
-        aria-invalid={!!error}
-        onChange={(event) => { setDraft(event.target.value); setError(""); }}
-        onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); apply(); } }}
-      />
-      <button type="button" disabled={!available} onClick={apply}>Apply time</button>
-      <p id="source-time-help" className="field-note">
-        Enter date/time in UTC, not local time. Only exact source timestamps are accepted; no automatic nearest-time selection.
-        {available ? ` ${times.length} timestamps currently prepared.` : " No timestamps available."}
+      <label htmlFor="source-date-input" className="source-time-label">
+        <Calendar size={14} />
+        DATE · SOURCE UTC
+      </label>
+      <div className="source-date-row">
+        <input
+          id="source-date-input"
+          type="date"
+          value={draft || currentDateStr}
+          min={minDate}
+          max={maxDate}
+          disabled={!available}
+          aria-describedby="source-date-help"
+          onChange={(e) => handleDateChange(e.target.value)}
+        />
+      </div>
+      {matchedDisplay && (
+        <div className="source-date-matched">
+          <ArrowRight size={12} />
+          <span className="matched-label">Matched to</span>
+          <strong>{matchedDisplay}</strong>
+        </div>
+      )}
+      <p id="source-date-help" className="field-note">
+        {available
+          ? `Select a date — auto-snaps to nearest available frame from ${times.length} timestamps.`
+          : "No timestamps available."}
       </p>
-      <p id="source-time-error" role="alert" className="field-note">{error}</p>
-      <label htmlFor="dataset-time">AVAILABLE SOURCE TIMES · UTC</label>
-      <select id="dataset-time" value={timestamp ?? ""} disabled={!available}
-        onChange={(event) => { setDraft(event.target.value.replace(/Z$/, "")); setError(""); onSelect(event.target.value); }}>
-        {!available && <option value="">No timestamps available</option>}
-        {times.map((time) => <option key={time}>{time}</option>)}
-      </select>
     </div>
   );
 }
